@@ -5,7 +5,7 @@
 #include <omp.h>
 
 /*OPERACION:
- *  (5+3)*(4+8) + [(7)-(2)] = 101
+ *  (5+3)*(4+8) + (7-2) = 101
  *
  */
 
@@ -17,33 +17,33 @@ int sum4 = 0;
 int sum5 = 0;
 
 void funcionA() {
-    int id = omp_get_thread_num();
-    printf("Thread %d: Ejecutando funcionA\n", id);
-    int wait_time = rand() % 5 + 1;
-    sleep(wait_time);
-    printf("%d segundos antes de la ejecucion de sum4\n", wait_time);
-    sum4 = 7 - 2; // Usar valores globales ya calculados
+	int id = omp_get_thread_num();
+    	printf("Thread %d: Ejecutando funcionA\n", id);
+    	int wait_time = rand() % 5 + 1;
+    	sleep(wait_time);
+    	printf("%d segundos antes de la ejecucion de sum4\n", wait_time);
+    	sum4 = 7 - 2;
 }
 
 void funcionB() {
-    int id = omp_get_thread_num();
-    printf("Thread %d: Ejecutando funcionB\n", id);
-    sum1 = 5 + 3; // Asignación directa a la variable global
+	int id = omp_get_thread_num();
+    	printf("Thread %d: Ejecutando funcionB\n", id);
+    	sum1 = 5 + 3;
 }
 
 void funcionC() {
-    int id = omp_get_thread_num();
-    printf("Thread %d: Ejecutando funcionC\n", id);
-    sum2 = 4 + 8; // Asignación directa a la variable global
+    	int id = omp_get_thread_num();
+    	printf("Thread %d: Ejecutando funcionC\n", id);
+    	sum2 = 4 + 8;
 }
 
 void funcionE() {
-    sum5 = mult3 + sum4;
+    	sum5 = mult3 + sum4;
 }
 
 void funcionD() {
-    mult3 = sum1 * sum2;
-    funcionE();
+    	mult3 = sum1 * sum2;
+    	funcionE();
 }
 
 int main() {
@@ -52,21 +52,14 @@ int main() {
 	// Crear hilos para calcular sum1, sum2 y sum4 en paralelo
     	#pragma omp parallel sections
     	{
-		//#pragma omp atomic
-        	#pragma omp section
-        	{
-            	funcionB();
-        	}
+		#pragma omp section
+        	{funcionB();}
 
        		#pragma omp section
-        	{
-            	funcionC();
-        	}
+        	{funcionC();}
 
         	#pragma omp section
-        	{
-            	funcionA();
-        	}
+        	{funcionA();}
     	}
 
     	// Una vez que todas las secciones paralelas han terminado, ejecutar funcionD

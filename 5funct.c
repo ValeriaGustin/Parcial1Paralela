@@ -7,7 +7,10 @@
 #include <time.h>
 
 /*OPERACION:
- *  (5+3)*(4+8) + [(7)-(2)] = 101
+ *    B  *  C   +   A
+ *       D      +   A
+ *              E
+ *  (5+3)*(4+8) + (7-2) = 101
  *
  */ 
 
@@ -24,19 +27,19 @@ void *funcionA(void *id) {
     	int wait_time = rand() % 5 + 1;
     	sleep(wait_time);
     	printf("%d segundos antes de la ejecucion de sum4\n", wait_time);
-    	sum4 = 7 - 2; // Usar valores globales ya calculados
+    	sum4 = 7 - 2;
     	pthread_exit(NULL);
 }
 
 void *funcionB(void *id) {
     	printf("Thread %ld: Ejecutando funcionB\n", (long) id);
-    	sum1 = 5 + 3; // Asignación directa a la variable global
+    	sum1 = 5 + 3;
     	pthread_exit(NULL);
 }
 
 void *funcionC(void *id) {
     	printf("Thread %ld: Ejecutando funcionC\n", (long) id);
-    	sum2 = 4 + 8; // Asignación directa a la variable global
+    	sum2 = 4 + 8;
     	pthread_exit(NULL);
 }
 void funcionE(){
@@ -47,7 +50,6 @@ void funcionE(){
 
 void funcionD(){
 	mult3 = sum1 * sum2;
-	//pthread_join(thread2, NULL); //Esperar a que termine A
     	funcionE();
 }
 
